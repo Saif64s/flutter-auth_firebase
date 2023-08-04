@@ -1,6 +1,7 @@
 import 'package:auth_practice/services/auth_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
 
 import '../widgets/my_buttons.dart';
 import '../widgets/my_txtfld.dart';
@@ -14,20 +15,32 @@ class LoginPage extends StatefulWidget {
   State<LoginPage> createState() => _LoginPageState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class _LoginPageState extends State<LoginPage>
+    with SingleTickerProviderStateMixin {
   // text editing controllers
-  final emailController = TextEditingController();
-  final passwordController = TextEditingController();
+  final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
+  late AnimationController _animationController;
   bool isAuthenticating = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _animationController = AnimationController(
+      vsync: this,
+      duration: const Duration(seconds: 1),
+    );
+  }
 
   // sign user in method
   void signUserIn() async {
     setState(() {
       isAuthenticating = true;
+      _animationController.forward();
     });
     try {
       await FirebaseAuth.instance.signInWithEmailAndPassword(
-          email: emailController.text, password: passwordController.text);
+          email: _emailController.text, password: _passwordController.text);
     } on FirebaseAuthException catch (e) {
       if (e.code == 'wrong-password') {
         ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
@@ -41,8 +54,9 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   void dispose() {
-    emailController.dispose();
-    passwordController.dispose();
+    _emailController.dispose();
+    _passwordController.dispose();
+    _animationController.dispose();
     super.dispose();
   }
 
@@ -59,14 +73,12 @@ class _LoginPageState extends State<LoginPage> {
                 const SizedBox(height: 50),
 
                 // logo
-                Icon(
-                  !isAuthenticating
-                      ? Icons.lock_outline
-                      : Icons.lock_open_sharp,
-                  size: 100,
-                ),
-
-                const SizedBox(height: 50),
+                Lottie.network(
+                    "https://lottie.host/0b036376-42c9-448e-be27-731dc85ae470/P9yISM6cTX.json",
+                    controller: _animationController,
+                    height: 200,
+                    width: 200,
+                    fit: BoxFit.fill),
 
                 // welcome back, you've been missed!
                 Text(
@@ -81,7 +93,7 @@ class _LoginPageState extends State<LoginPage> {
 
                 // username textfield
                 MyTextField(
-                  controller: emailController,
+                  controller: _emailController,
                   hintText: 'Email or Username',
                   obscureText: false,
                 ),
@@ -90,7 +102,7 @@ class _LoginPageState extends State<LoginPage> {
 
                 // password textfield
                 MyTextField(
-                  controller: passwordController,
+                  controller: _passwordController,
                   hintText: 'Password',
                   obscureText: true,
                 ),

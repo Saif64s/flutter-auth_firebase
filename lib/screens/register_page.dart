@@ -1,6 +1,7 @@
 import 'package:auth_practice/services/auth_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
 
 import '../widgets/my_buttons.dart';
 import '../widgets/my_txtfld.dart';
@@ -14,17 +15,29 @@ class RegisterPage extends StatefulWidget {
   State<RegisterPage> createState() => _RegisterPageState();
 }
 
-class _RegisterPageState extends State<RegisterPage> {
+class _RegisterPageState extends State<RegisterPage>
+    with SingleTickerProviderStateMixin {
   // text editing controllers
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
   final confirmedPasswordController = TextEditingController();
+  late AnimationController _animationController;
   bool isAuthenticating = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _animationController = AnimationController(
+      vsync: this,
+      duration: const Duration(seconds: 1),
+    );
+  }
 
   // sign user up method
   void registerUser() async {
     setState(() {
       isAuthenticating = true;
+      _animationController.forward();
     });
     try {
       if (passwordController.text == confirmedPasswordController.text) {
@@ -51,6 +64,7 @@ class _RegisterPageState extends State<RegisterPage> {
   void dispose() {
     emailController.dispose();
     passwordController.dispose();
+    _animationController.dispose();
     super.dispose();
   }
 
@@ -64,17 +78,14 @@ class _RegisterPageState extends State<RegisterPage> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const SizedBox(height: 30),
-
                 // logo
-                Icon(
-                  !isAuthenticating
-                      ? Icons.supervisor_account_outlined
-                      : Icons.assignment_turned_in_outlined,
-                  size: 100,
-                ),
 
-                const SizedBox(height: 30),
+                Lottie.network(
+                    "https://lottie.host/9c1e24e3-ebbf-47eb-b474-5206ecec85e5/R0qZVO3gdv.json",
+                    controller: _animationController,
+                    height: 300,
+                    width: 300,
+                    fit: BoxFit.fill),
 
                 // welcome back, you've been missed!
                 Text(
@@ -108,7 +119,7 @@ class _RegisterPageState extends State<RegisterPage> {
                 // confirm password textfield
                 MyTextField(
                   controller: confirmedPasswordController,
-                  hintText: 'Password',
+                  hintText: 'Confirm Password',
                   obscureText: true,
                 ),
 
