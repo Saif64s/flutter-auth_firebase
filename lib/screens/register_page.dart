@@ -29,7 +29,7 @@ class _RegisterPageState extends State<RegisterPage>
     super.initState();
     _animationController = AnimationController(
       vsync: this,
-      duration: const Duration(seconds: 1),
+      duration: const Duration(seconds: 2),
     );
   }
 
@@ -80,11 +80,10 @@ class _RegisterPageState extends State<RegisterPage>
               children: [
                 // logo
 
-                Lottie.network(
-                    "https://lottie.host/9c1e24e3-ebbf-47eb-b474-5206ecec85e5/R0qZVO3gdv.json",
+                Lottie.asset("assets/sign_up_animation.json",
                     controller: _animationController,
-                    height: 300,
-                    width: 300,
+                    height: 220,
+                    width: 220,
                     fit: BoxFit.fill),
 
                 // welcome back, you've been missed!
@@ -96,7 +95,7 @@ class _RegisterPageState extends State<RegisterPage>
                   ),
                 ),
 
-                const SizedBox(height: 25),
+                const SizedBox(height: 15),
 
                 // username textfield
                 MyTextField(
@@ -187,7 +186,7 @@ class _RegisterPageState extends State<RegisterPage>
                   ],
                 ),
 
-                const SizedBox(height: 50),
+                const SizedBox(height: 30),
 
                 // not a member? register now
                 Row(
