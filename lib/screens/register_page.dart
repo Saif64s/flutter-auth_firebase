@@ -1,5 +1,6 @@
+import 'package:auth_practice/cloud_services/firebase_api.dart';
 import 'package:auth_practice/services/auth_service.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 
@@ -18,9 +19,9 @@ class RegisterPage extends StatefulWidget {
 class _RegisterPageState extends State<RegisterPage>
     with SingleTickerProviderStateMixin {
   // text editing controllers
-  final emailController = TextEditingController();
-  final passwordController = TextEditingController();
-  final confirmedPasswordController = TextEditingController();
+  final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
+  final _confirmedPasswordController = TextEditingController();
   late AnimationController _animationController;
   bool isAuthenticating = false;
 
@@ -39,31 +40,15 @@ class _RegisterPageState extends State<RegisterPage>
       isAuthenticating = true;
       _animationController.forward();
     });
-    try {
-      if (passwordController.text == confirmedPasswordController.text) {
-        await FirebaseAuth.instance.createUserWithEmailAndPassword(
-            email: emailController.text, password: passwordController.text);
-      } else {
-        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-            content: Text("The password provided Doesnot match.")));
-      }
-    } on FirebaseAuthException catch (e) {
-      if (e.code == 'wrong-password') {
-        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-            content: Text("The password provided is too weak.")));
-      } else if (e.code == 'user-not-found:') {
-        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-            content: Text("The account does not exist. Try creating one")));
-      }
-    } catch (e) {
-      print(e);
-    }
+
+    FirebaseApi.registerUserWithEmailPassword(context, _emailController.text,
+        _passwordController.text, _confirmedPasswordController.text);
   }
 
   @override
   void dispose() {
-    emailController.dispose();
-    passwordController.dispose();
+    _emailController.dispose();
+    _passwordController.dispose();
     _animationController.dispose();
     super.dispose();
   }
@@ -99,7 +84,7 @@ class _RegisterPageState extends State<RegisterPage>
 
                 // username textfield
                 MyTextField(
-                  controller: emailController,
+                  controller: _emailController,
                   hintText: 'Email or Username',
                   obscureText: false,
                 ),
@@ -108,7 +93,7 @@ class _RegisterPageState extends State<RegisterPage>
 
                 // password textfield
                 MyTextField(
-                  controller: passwordController,
+                  controller: _passwordController,
                   hintText: 'Password',
                   obscureText: true,
                 ),
@@ -117,7 +102,7 @@ class _RegisterPageState extends State<RegisterPage>
 
                 // confirm password textfield
                 MyTextField(
-                  controller: confirmedPasswordController,
+                  controller: _confirmedPasswordController,
                   hintText: 'Confirm Password',
                   obscureText: true,
                 ),

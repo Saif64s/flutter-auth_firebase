@@ -1,5 +1,6 @@
+import 'package:auth_practice/cloud_services/firebase_api.dart';
 import 'package:auth_practice/services/auth_service.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 
@@ -38,18 +39,9 @@ class _LoginPageState extends State<LoginPage>
       isAuthenticating = true;
       _animationController.forward();
     });
-    try {
-      await FirebaseAuth.instance.signInWithEmailAndPassword(
-          email: _emailController.text, password: _passwordController.text);
-    } on FirebaseAuthException catch (e) {
-      if (e.code == 'wrong-password') {
-        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-            content: Text("The password provided is too weak.")));
-      } else if (e.code == 'user-not-found:') {
-        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-            content: Text("The account does not exist. Try creating one")));
-      }
-    }
+
+    FirebaseApi.loginUserWithEmailPassword(
+        context, _emailController.text, _passwordController.text);
   }
 
   @override
@@ -77,8 +69,7 @@ class _LoginPageState extends State<LoginPage>
               const SizedBox(height: 50),
 
               // logo
-              Lottie.network(
-                  "https://lottie.host/0b036376-42c9-448e-be27-731dc85ae470/P9yISM6cTX.json",
+              Lottie.asset("assets/sign_in.json",
                   controller: _animationController,
                   height: 200,
                   width: 200,
