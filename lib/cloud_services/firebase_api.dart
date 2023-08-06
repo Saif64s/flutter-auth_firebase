@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class FirebaseApi {
+  // Register user with email and password
   static Future<void> registerUserWithEmailPassword(BuildContext context,
       String email, String password, String confirmPassword) async {
     try {
@@ -25,6 +26,7 @@ class FirebaseApi {
     }
   }
 
+  // Login user with Email and password
   static Future<void> loginUserWithEmailPassword(
       BuildContext context, String email, String password) async {
     try {
@@ -39,5 +41,9 @@ class FirebaseApi {
             content: Text("The account does not exist. Try creating one")));
       }
     }
+  }
+
+  static void signOutUser() {
+    FirebaseAuth.instance.signOut();
   }
 }

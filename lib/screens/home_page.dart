@@ -1,3 +1,4 @@
+import 'package:auth_practice/cloud_services/firebase_api.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -8,10 +9,6 @@ class HomePage extends StatelessWidget {
 
   final user = FirebaseAuth.instance.currentUser;
 
-  void signOutUser() {
-    FirebaseAuth.instance.signOut();
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -20,7 +17,9 @@ class HomePage extends StatelessWidget {
         backgroundColor: Colors.grey.shade300,
         actions: [
           IconButton(
-            onPressed: signOutUser,
+            onPressed: () {
+              FirebaseApi.signOutUser();
+            },
             icon: const Icon(
               Icons.logout_rounded,
             ),
