@@ -1,5 +1,4 @@
 import 'package:auth_practice/cloud_services/firebase_api.dart';
-import 'package:auth_practice/services/auth_service.dart';
 
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
@@ -158,7 +157,7 @@ class _RegisterPageState extends State<RegisterPage>
                     // google button
                     SquareTile(
                       imagePath: 'assets/google.png',
-                      onTap: () => AuthService().signInWithGoogle(),
+                      onTap: () => FirebaseApi.signInWithGoogle(),
                     ),
 
                     const SizedBox(width: 25),

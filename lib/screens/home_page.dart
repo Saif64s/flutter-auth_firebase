@@ -31,8 +31,8 @@ class HomePage extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Lottie.network(
-            "https://lottie.host/29eb2086-c6de-4bdd-938b-83cb5682489a/TgspobKKTw.json",
+          Lottie.asset(
+            "assets/user.json",
             height: 250,
             width: 250,
             fit: BoxFit.fill,
